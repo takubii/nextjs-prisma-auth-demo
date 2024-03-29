@@ -1,11 +1,13 @@
 import { prisma } from '@/globals/db';
+import Link from 'next/link';
 
 export default async function Home() {
-  const user = await prisma.user.findFirst();
+  const users = await prisma.user.findMany();
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-      <div>{JSON.stringify(user)}</div>
+    <main className='flex min-h-screen flex-col items-center p-24'>
+      <Link href='/login'>ログイン</Link>
+      <Link href='/register'>サインアップ</Link>
     </main>
   );
 }
