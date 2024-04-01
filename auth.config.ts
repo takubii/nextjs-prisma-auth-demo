@@ -1,3 +1,4 @@
+import { DEFAULT_LOGIN_REDIRECT, authRoutes, publicRoutes } from '@/routes';
 import { NextAuthConfig } from 'next-auth';
 
 export const authConfig = {
@@ -7,15 +8,22 @@ export const authConfig = {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnSignUp = nextUrl.pathname.startsWith('/register');
+      const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+      const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
 
-      if (isLoggedIn) {
+      if (isAuthRoute) {
+        if (isLoggedIn) {
+          return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+        }
+
         return true;
-      } else if (isOnSignUp) {
-        return true;
-      } else {
+      }
+
+      if (!isPublicRoute && !isLoggedIn) {
         return false;
       }
+
+      return true;
     },
   },
   providers: [],
