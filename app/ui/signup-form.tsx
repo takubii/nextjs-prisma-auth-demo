@@ -1,7 +1,7 @@
 'use client';
 
+import { signUp } from '@/app/lib/actions';
 import { useFormState } from 'react-dom';
-import { signUp } from '../lib/actions';
 
 export default function SignUpForm() {
   const initialState = { message: null, error: {} };
