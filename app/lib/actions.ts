@@ -1,10 +1,12 @@
 'use server';
 
+import { getUserByEmail } from '@/app/db/user';
+import { signUpSchema } from '@/app/lib/schemas';
+import { signIn, signOut } from '@/auth';
 import { prisma } from '@/globals/db';
 import bcrypt from 'bcrypt';
+import { AuthError } from 'next-auth';
 import { redirect } from 'next/navigation';
-import { getUserByEmail } from '../db/user';
-import { signUpSchema } from './schemas';
 
 export type SignUpState = {
   errors?: {
@@ -50,4 +52,29 @@ export async function signUp(prevState: SignUpState, formData: FormData): Promis
   }
 
   redirect('/login');
+}
+
+export async function login(prevState: string | undefined, formData: FormData) {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+
+    throw error;
+  }
+}
+
+export async function logout() {
+  try {
+    await signOut();
+  } catch (error) {
+    throw error;
+  }
 }
