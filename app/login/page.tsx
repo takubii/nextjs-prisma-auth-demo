@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function LoginPage() {
   return (
     <main className='flex justify-center md:h-screen'>
-      <div className='flex flex-col relative items-center w-full max-w-[400px]'>
+      <div className='flex flex-col items-center w-full max-w-[400px]'>
         <h1 className='my-6 w-full text-center text-2xl'>ログインページ</h1>
         <LoginForm />
         <div className='flex flex-col mt-8 text-center'>
